@@ -1,0 +1,136 @@
+<!-- I want to build a form html website using bootstrap which can search, filter, and show data from product.js which contain an export const product with key and value, keys are ProductNumber, ProductName, Amount, Price and Product Type. -->
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title></title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+            crossorigin="anonymous" />
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1>Product</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-10 col-xl-6 col-lg-8 col-md-10 col-sm-12">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control"
+                            placeholder="Search Product" aria-label="Search
+                            Product"
+                            aria-describedby="button-addon2"
+                            id="search-product">
+                        <button class="btn btn-outline-primary" type="button"
+                            id="button-search-product">Search</button>
+                    </div>
+                    <label for="check-update-search-product"
+                        class="update-control" id="check-update-search-product"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-11 col-xl-10 col-lg-10 col-md-10 col-sm-11">
+                <div id="datatable"></div>
+            </div>
+        </div>
+
+        <script type="module">
+        import { product } from './data/product.js';
+        let datatable = document.getElementById('datatable');
+        let search_product = document.getElementById('search-product');
+        let button_search_product = document.getElementById('button-search-product');
+        let check_update_search_product = document.getElementById('check-update-search-product');
+
+        button_search_product.addEventListener('click', function () {
+            product.forEach((product) => {
+                if (product.ProductNumber == search_product.value) {
+                    datatable.innerHTML = `
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product Number</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Product Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>${product.ProductNumber}</td>
+                                <td>${product.ProductName}</td>
+                                <td>${product.Amount}</td>
+                                <td>${product.Price}</td>
+                                <td>${product.ProductType}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    `;
+                }
+            });
+            check_update_search_product.innerHTML = "Finish Search";
+        });
+
+        // if the text in search_product is changed, check_update_search_product will be empty
+        search_product.addEventListener('change', function () {
+            check_update_search_product.innerHTML = "";
+        });
+
+        // check if the enter key is clicked, click the button-search-product
+        search_product.addEventListener('keyup', function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                button_search_product.click();
+            }
+        });
+
+        //check if the search-product is empty, if it is empty then show all data
+        document.getElementById('button-search-product').addEventListener('click', function () {
+            datatable.innerHTML = `    
+            <table class="table table-striped">                        
+                <thead>
+                    <tr>
+                        <th scope="col">Product Number</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Product Type</th>
+                    </tr>
+                </thead>
+            </table>
+            `;
+            product.forEach((product) => {
+                if (search_product.value == "") {
+                    datatable.insertAdjacentHTML('beforeend', `
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <td>${product.ProductNumber}</td>
+                                    <td>${product.ProductName}</td>
+                                    <td>${product.Amount}</td>
+                                    <td>${product.Price}</td>
+                                    <td>${product.ProductType}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    `);
+                }
+            });
+        });
+    </script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"></script>
+    </body>
+
+</html>
