@@ -2,92 +2,104 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title></title>
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
-            crossorigin="anonymous" />
-    </head>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Product js Search and Filter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+</head>
 
-    <body>
-        <div class="container">
-            <div class="row">
-                <div class="col-12 mt-4">
-                    <h1>Product Search</h1>
+<body>
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-4 mt-4">
+                <h1>Product Search</h1>
+            </div>
+            <div class="col-4 mt-4">
+                <button class="btn btn-primary" type="button" id="button-clear-table">
+                    Clear Table
+                </button>
+            </div>
+            // add clear 
+        </div>
+        <div class="row">
+            <div class="col-4 mt-0">
+                <div class="form-select-sm mb-3">
+                    <select class="form-select" aria-label="Default select
+                            example" id="select-product-type">
+                        <option value="ProductNumber">ProductNumber</option>
+                        <option value="ProductName">ProductName</option>
+                        <option value="Amount">Amount</option>
+                        <option value="Price">Price</option>
+                        <option value="ProductType">ProductType</option>
+                    </select>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-4 mt-0">
-                    <div class="form-select-sm mb-3">
-                        <select class="form-select" aria-label="Default select example"
-                            id="select-product-type">
-                            <option selected>None</option>
-                            <option value="ProductNumber">ProductNumber</option>
-                            <option value="ProductName">ProductName</option>
-                            <option value="Amount">Amount</option>
-                            <option value="Price">Price</option>
-                            <option value="ProductType">ProductType</option>
-                        </select>
-                    </div>
+            <div class="col-8 mt-1">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search Product" aria-label="Search
+                            Product" aria-describedby="button-addon2" id="search-query" />
+                    <button class="btn btn-outline-primary" type="button" id="button-search-query">
+                        Search
+                    </button>
                 </div>
-                <div class="col-8 mt-1">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control"
-                            placeholder="Search Product" aria-label="Search
-                            Product"
-                            aria-describedby="button-addon2"
-                            id="search-query">
-                        <button class="btn btn-outline-primary" type="button"
-                            id="button-search-query">Search</button>
-                    </div>
-                    <label for="check-update-search-query"
-                        class="update-control" id="check-update-search-query"></label>
-                </div>
+                <label for="check-update-search-query" class="update-control" id="check-update-search-query"></label>
             </div>
         </div>
-
-        <div class="row justify-content-center">
-            <div class="col-11 col-xl-10 col-lg-10 col-md-10 col-sm-11">
-                <div id="datatable"></div>
+        <div class="row">
+            <div class="col-4 mt-0">
+                <div class="form-select-sm mb-3">
+                    <select class="form-select" aria-label="Default select
+                            example" id="filter-product-type">
+                        <option value="Amount">Amount</option>
+                        <option value="Price">Price</option>
+                        <option value="ProductType">ProductType</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-8 mt-1">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Filter Product" aria-label="Filter
+                            Product Start" aria-describedby="button-addon2" id="filter-query-start" />
+                    &nbsp;&nbsp;&nbsp;<label for="~">~</label>&nbsp;&nbsp;&nbsp;
+                    <input type="text" class="form-control" placeholder="Filter Product" aria-label="Filter
+                            Product Enter" aria-describedby="button-addon2" id="filter-query-end" />
+                    <button class="btn btn-outline-primary" type="button" id="button-filter-query">
+                        Filter
+                    </button>
+                </div>
+                <label for="check-update-filter-query" class="update-control" id="check-update-filter-query"></label>
             </div>
         </div>
+    </div>
 
-        <script type="module">
-        import { product } from './data/product.js';
-        let datatable = document.getElementById('datatable');
-        let search_query = document.getElementById('search-query');
-        let button_search_query = document.getElementById('button-search-query');
-        let check_update_search_query = document.getElementById('check-update-search-query');
-        
-        let datatable_all = `
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Product Number</th>
-                        <th scope="col">Product Name</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Product Type</th>
-                    </tr>
-                </thead>
-                <tbody>
-                        <td>${product.ProductNumber}</td>
-                        <td>${product.ProductName}</td>
-                        <td>${product.Amount}</td>
-                        <td>${product.Price}</td>
-                        <td>${product.ProductType}</td>
-                </tbody>
-            </table>
-        `;
+    <div class="row justify-content-center">
+        <div class="col-11 col-xl-10 col-lg-10 col-md-10 col-sm-11">
+            <div id="datatable"></div>
+        </div>
+    </div>
 
-        button_search_query.addEventListener('click', function () {
+    <script type="module">
+        import { product } from "./data/product.js";
+        let datatable = document.getElementById("datatable");
+        let search_query = document.getElementById("search-query");
+        let button_search_query = document.getElementById("button-search-query");
+        let check_update_search_query = document.getElementById(
+            "check-update-search-query"
+        );
+        let filter_query_start = document.getElementById("filter-query-start");
+        let filter_query_end = document.getElementById("filter-query-end");
+        let button_filter_query = document.getElementById("button-filter-query");
+        let check_update_filter_query = document.getElementById(
+            "check-update-filter-query"
+        );
+        let button_clear_table = document.getElementById("button-clear-table");
+
+        button_search_query.addEventListener("click", function () {
             let check_if_product_exist = false;
             datatable.innerHTML = "";
-            let select_value = document.getElementById('select-product-type').value;
+            let select_value = document.getElementById("select-product-type").value;
             if (search_query.value != "") {
                 product.forEach((product) => {
                     if (product[select_value] == search_query.value) {
@@ -123,43 +135,126 @@
                     `;
                 }
                 // check_update_search_query.innerHTML = `Finish Search ${search_query.value}`;
-            } 
-            else {
-                datatable.innerHTML = datatable_all;
-                let tableBody = document.querySelector("#datatable tbody");
-                tableBody.innerHTML = ""; // clear the table body before appending new rows
-                product.forEach((product) => {
-                    let row = tableBody.insertRow();
-                    row.innerHTML = `
-                        <td>${product.ProductNumber}</td>
-                        <td>${product.ProductName}</td>
-                        <td>${product.Amount}</td>
-                        <td>${product.Price}</td>
-                        <td>${product.ProductType}</td>
-                    `;
-                });
-            };
-
+            } else {
+                displayAllProduct();
+            }
         });
 
+        // if the button_filter_query is clicked, filter the product by the filter_query_start and filter_query_end
 
+        button_filter_query.addEventListener("click", function () {
+            let check_if_product_exist = false;
+            datatable.innerHTML = "";
+            datatable.innerHTML = `
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Product Number</th>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Product Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            `;
+            let select_value = document.getElementById("filter-product-type").value;
+            let tableBody = document.querySelector("#datatable tbody");
+            tableBody.innerHTML = ""; // clear the table body before appending new rows
+            if (filter_query_start.value != "" && filter_query_end.value != "") {
+                product.forEach((product) => {
+                    if (
+                        product[select_value] >= filter_query_start.value &&
+                        product[select_value] <= filter_query_end.value
+                    ) {
+                        console.log(product[select_value] + search_query.value);
+                        let row = tableBody.insertRow();
+                        row.innerHTML = `
+                            <td>${product.ProductNumber}</td>
+                            <td>${product.ProductName}</td>
+                            <td>${product.Amount}</td>
+                            <td>${product.Price}</td>
+                            <td>${product.ProductType}</td>
+                        `;
+                        check_if_product_exist = true;
+                    }
+                });
+                if (check_if_product_exist == false) {
+                    datatable.innerHTML = `
+                    <div class="alert alert-danger" role="alert">
+                        Product not found
+                    </div>
+                    `;
+                }
+                // check_update_search_query.innerHTML = `Finish Search ${search_query.value}`;
+            } else {
+                displayAllProduct();
+            }
+        });
+        
         // if the text in search_query is changed, check_update_search_query will be empty
-        search_query.addEventListener('change', function () {
+        search_query.addEventListener("change", function () {
             check_update_search_query.innerHTML = "";
         });
 
-        // check if the enter key is clicked, click the button-search-query
-        search_query.addEventListener('keyup', function (event) {
+        // check if my last text input is in search_query, then if the enter key is clicked, click the button-search-query, if the last text input is in filter_query_start or filter_query_end, then if the enter key is clicked, click the button-filter-query
+        search_query.addEventListener("keyup", function (event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
                 button_search_query.click();
             }
         });
+
+        filter_query_start.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                button_filter_query.click();
+            }
+        });
+
+
+
+        // if the button_clear_table is clicked, clear all the table.
+        button_clear_table.addEventListener("click", function () {
+            datatable.innerHTML = "";
+        });
+
+        // display all the product
+        function displayAllProduct() {
+            datatable.innerHTML = `
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Product Number</th>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Product Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            `;
+            let tableBody = document.querySelector("#datatable tbody");
+            tableBody.innerHTML = ""; // clear the table body before appending new rows
+            product.forEach((product) => {
+                let row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${product.ProductNumber}</td>
+                    <td>${product.ProductName}</td>
+                    <td>${product.Amount}</td>
+                    <td>${product.Price}</td>
+                    <td>${product.ProductType}</td>
+                `;
+            });
+        }
     </script>
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-            crossorigin="anonymous"></script>
-    </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+</body>
 
 </html>
