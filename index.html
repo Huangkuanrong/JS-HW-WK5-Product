@@ -64,11 +64,11 @@
             </div>
             <div class="col-8 mt-1">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Filter Product" aria-label="Filter
-                            Product Start" aria-describedby="button-addon2" id="filter-query-start" />
+                    <input type="text" class="form-control" placeholder="Filter Product Start" aria-label="Filter
+                            Product" aria-describedby="button-addon2" id="filter-query-start" />
                     &nbsp;&nbsp;&nbsp;<label for="~">~</label>&nbsp;&nbsp;&nbsp;
-                    <input type="text" class="form-control" placeholder="Filter Product" aria-label="Filter
-                            Product Enter" aria-describedby="button-addon2" id="filter-query-end" />
+                    <input type="text" class="form-control" placeholder="Filter Product End" aria-label="Filter
+                            Product" aria-describedby="button-addon2" id="filter-query-end" />
                     <button class="btn btn-outline-primary" type="button" id="button-filter-query">
                         Filter
                     </button>
@@ -152,7 +152,6 @@
                         text: "Product Not Found!",
                     });
                 }
-                // check_update_search_query.innerHTML = `Finish Search ${search_query.value}`;
             } else {
                 displayAllProduct();
             }
@@ -207,9 +206,18 @@
                     </div>
                     `;
                 }
-                // check_update_search_query.innerHTML = `Finish Search ${search_query.value}`;
-            } else {
+            } 
+            //else if both of them are empty, show all product
+            else if (filter_query_start.value == "" && filter_query_end.value == "") {
                 displayAllProduct();
+            }
+            //else if one of the filter_query_start or filter_query_end is empty, show alert message to fill the input field
+            else if (filter_query_start.value == "" || filter_query_end.value == "") {
+                datatable.innerHTML = `
+                <div class="alert alert-danger" role="alert">
+                    Please fill the input field
+                </div>
+                `;
             }
         });
         
@@ -287,5 +295,4 @@
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
 </body>
-
 </html>
