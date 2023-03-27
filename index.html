@@ -8,20 +8,25 @@
     <title>Product js Search and Filter</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
     <div class="container">
         <div class="row mb-4">
-            <div class="col-4 mt-4">
+            <div class="col-6 mt-4">
                 <h1>Product Search</h1>
             </div>
-            <div class="col-4 mt-4">
+            <div class="col-2 lg-2 xl-2 mt-4">
                 <button class="btn btn-primary" type="button" id="button-clear-table">
                     Clear Table
                 </button>
             </div>
-            // add clear 
+            <div class="col-2 lg-2 xl-2 mt-4">
+                <button class="btn btn-primary" type="button" id="button-clear-input">
+                    Clear Input
+                </button>
+            </div>
         </div>
         <div class="row">
             <div class="col-4 mt-0">
@@ -54,7 +59,6 @@
                             example" id="filter-product-type">
                         <option value="Amount">Amount</option>
                         <option value="Price">Price</option>
-                        <option value="ProductType">ProductType</option>
                     </select>
                 </div>
             </div>
@@ -82,6 +86,7 @@
 
     <script type="module">
         import { product } from "./data/product.js";
+
         let datatable = document.getElementById("datatable");
         let search_query = document.getElementById("search-query");
         let button_search_query = document.getElementById("button-search-query");
@@ -95,44 +100,57 @@
             "check-update-filter-query"
         );
         let button_clear_table = document.getElementById("button-clear-table");
+        let button_clear_input = document.getElementById("button-clear-input");
+        
+        
 
         button_search_query.addEventListener("click", function () {
+            //clear filter input field
+            filter_query_start.value = "";
+            filter_query_end.value = "";
+
             let check_if_product_exist = false;
             datatable.innerHTML = "";
+            datatable.innerHTML = `
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Product Number</th>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Product Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            `;
             let select_value = document.getElementById("select-product-type").value;
+            let tableBody = document.querySelector("#datatable tbody");
+            tableBody.innerHTML = ""; // clear the table body before appending new rows
             if (search_query.value != "") {
                 product.forEach((product) => {
                     if (product[select_value] == search_query.value) {
-                        console.log(product[select_value] + search_query.value);
-                        datatable.innerHTML = `
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Product Number</th>
-                                        <th scope="col">Product Name</th>
-                                        <th scope="col">Amount</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Product Type</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                        <td>${product.ProductNumber}</td>
-                                        <td>${product.ProductName}</td>
-                                        <td>${product.Amount}</td>
-                                        <td>${product.Price}</td>
-                                        <td>${product.ProductType}</td>
-                                </tbody>
-                            </table>
+                        let row = tableBody.insertRow();
+                        row.innerHTML = `
+                            <td>${product.ProductNumber}</td>
+                            <td>${product.ProductName}</td>
+                            <td>${product.Amount}</td>
+                            <td>${product.Price}</td>
+                            <td>${product.ProductType}</td>
                         `;
                         check_if_product_exist = true;
                     }
                 });
                 if (check_if_product_exist == false) {
-                    datatable.innerHTML = `
-                    <div class="alert alert-danger" role="alert">
-                        Product not found
-                    </div>
-                    `;
+                    datatable.innerHTML = "";
+                    // use sweetalert2 to display the message
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Product Not Found!",
+                    });
                 }
                 // check_update_search_query.innerHTML = `Finish Search ${search_query.value}`;
             } else {
@@ -141,8 +159,10 @@
         });
 
         // if the button_filter_query is clicked, filter the product by the filter_query_start and filter_query_end
-
         button_filter_query.addEventListener("click", function () {
+            //clear search input field
+            search_query.value = "";
+
             let check_if_product_exist = false;
             datatable.innerHTML = "";
             datatable.innerHTML = `
@@ -169,7 +189,6 @@
                         product[select_value] >= filter_query_start.value &&
                         product[select_value] <= filter_query_end.value
                     ) {
-                        console.log(product[select_value] + search_query.value);
                         let row = tableBody.insertRow();
                         row.innerHTML = `
                             <td>${product.ProductNumber}</td>
@@ -214,7 +233,19 @@
             }
         });
 
+        filter_query_end.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                button_filter_query.click();
+            }
+        });
 
+        // if the button_clear_input is clicked, clear all the input
+        button_clear_input.addEventListener("click", function () {
+            search_query.value = "";
+            filter_query_start.value = "";
+            filter_query_end.value = "";
+        });
 
         // if the button_clear_table is clicked, clear all the table.
         button_clear_table.addEventListener("click", function () {
