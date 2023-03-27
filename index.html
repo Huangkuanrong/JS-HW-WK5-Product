@@ -16,23 +16,36 @@
     <body>
         <div class="container">
             <div class="row">
-                <div class="col-12">
-                    <h1>Product</h1>
+                <div class="col-12 mt-4">
+                    <h1>Product Search</h1>
                 </div>
             </div>
             <div class="row">
-                <div class="col-10 col-xl-6 col-lg-8 col-md-10 col-sm-12">
+                <div class="col-4 mt-0">
+                    <div class="form-select-sm mb-3">
+                        <select class="form-select" aria-label="Default select example"
+                            id="select-product-type">
+                            <option selected>None</option>
+                            <option value="ProductNumber">ProductNumber</option>
+                            <option value="ProductName">ProductName</option>
+                            <option value="Amount">Amount</option>
+                            <option value="Price">Price</option>
+                            <option value="ProductType">ProductType</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-8 mt-1">
                     <div class="input-group mb-3">
                         <input type="text" class="form-control"
                             placeholder="Search Product" aria-label="Search
                             Product"
                             aria-describedby="button-addon2"
-                            id="search-product">
+                            id="search-query">
                         <button class="btn btn-outline-primary" type="button"
-                            id="button-search-product">Search</button>
+                            id="button-search-query">Search</button>
                     </div>
-                    <label for="check-update-search-product"
-                        class="update-control" id="check-update-search-product"></label>
+                    <label for="check-update-search-query"
+                        class="update-control" id="check-update-search-query"></label>
                 </div>
             </div>
         </div>
@@ -46,57 +59,12 @@
         <script type="module">
         import { product } from './data/product.js';
         let datatable = document.getElementById('datatable');
-        let search_product = document.getElementById('search-product');
-        let button_search_product = document.getElementById('button-search-product');
-        let check_update_search_product = document.getElementById('check-update-search-product');
-
-        button_search_product.addEventListener('click', function () {
-            product.forEach((product) => {
-                if (product.ProductNumber == search_product.value) {
-                    datatable.innerHTML = `
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">Product Number</th>
-                                <th scope="col">Product Name</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Product Type</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>${product.ProductNumber}</td>
-                                <td>${product.ProductName}</td>
-                                <td>${product.Amount}</td>
-                                <td>${product.Price}</td>
-                                <td>${product.ProductType}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    `;
-                }
-            });
-            check_update_search_product.innerHTML = "Finish Search";
-        });
-
-        // if the text in search_product is changed, check_update_search_product will be empty
-        search_product.addEventListener('change', function () {
-            check_update_search_product.innerHTML = "";
-        });
-
-        // check if the enter key is clicked, click the button-search-product
-        search_product.addEventListener('keyup', function (event) {
-            if (event.keyCode === 13) {
-                event.preventDefault();
-                button_search_product.click();
-            }
-        });
-
-        //check if the search-product is empty, if it is empty then show all data
-        document.getElementById('button-search-product').addEventListener('click', function () {
-            datatable.innerHTML = `    
-            <table class="table table-striped">                        
+        let search_query = document.getElementById('search-query');
+        let button_search_query = document.getElementById('button-search-query');
+        let check_update_search_query = document.getElementById('check-update-search-query');
+        
+        let datatable_all = `
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th scope="col">Product Number</th>
@@ -106,25 +74,86 @@
                         <th scope="col">Product Type</th>
                     </tr>
                 </thead>
+                <tbody>
+                        <td>${product.ProductNumber}</td>
+                        <td>${product.ProductName}</td>
+                        <td>${product.Amount}</td>
+                        <td>${product.Price}</td>
+                        <td>${product.ProductType}</td>
+                </tbody>
             </table>
-            `;
-            product.forEach((product) => {
-                if (search_product.value == "") {
-                    datatable.insertAdjacentHTML('beforeend', `
-                        <table class="table table-striped">
-                            <tbody>
-                                <tr>
-                                    <td>${product.ProductNumber}</td>
-                                    <td>${product.ProductName}</td>
-                                    <td>${product.Amount}</td>
-                                    <td>${product.Price}</td>
-                                    <td>${product.ProductType}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    `);
+        `;
+
+        button_search_query.addEventListener('click', function () {
+            let check_if_product_exist = false;
+            datatable.innerHTML = "";
+            let select_value = document.getElementById('select-product-type').value;
+            if (search_query.value != "") {
+                product.forEach((product) => {
+                    if (product[select_value] == search_query.value) {
+                        console.log(product[select_value] + search_query.value);
+                        datatable.innerHTML = `
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Product Number</th>
+                                        <th scope="col">Product Name</th>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Product Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        <td>${product.ProductNumber}</td>
+                                        <td>${product.ProductName}</td>
+                                        <td>${product.Amount}</td>
+                                        <td>${product.Price}</td>
+                                        <td>${product.ProductType}</td>
+                                </tbody>
+                            </table>
+                        `;
+                        check_if_product_exist = true;
+                    }
+                });
+                if (check_if_product_exist == false) {
+                    datatable.innerHTML = `
+                    <div class="alert alert-danger" role="alert">
+                        Product not found
+                    </div>
+                    `;
                 }
-            });
+                // check_update_search_query.innerHTML = `Finish Search ${search_query.value}`;
+            } 
+            else {
+                datatable.innerHTML = datatable_all;
+                let tableBody = document.querySelector("#datatable tbody");
+                tableBody.innerHTML = ""; // clear the table body before appending new rows
+                product.forEach((product) => {
+                    let row = tableBody.insertRow();
+                    row.innerHTML = `
+                        <td>${product.ProductNumber}</td>
+                        <td>${product.ProductName}</td>
+                        <td>${product.Amount}</td>
+                        <td>${product.Price}</td>
+                        <td>${product.ProductType}</td>
+                    `;
+                });
+            };
+
+        });
+
+
+        // if the text in search_query is changed, check_update_search_query will be empty
+        search_query.addEventListener('change', function () {
+            check_update_search_query.innerHTML = "";
+        });
+
+        // check if the enter key is clicked, click the button-search-query
+        search_query.addEventListener('keyup', function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                button_search_query.click();
+            }
         });
     </script>
         <script
